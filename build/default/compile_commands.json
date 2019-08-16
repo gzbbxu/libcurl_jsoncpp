@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/root/eclipse-workspace/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/face_recong.cpp.o -c /root/eclipse-workspace/face_recong/face_recong.cpp",
+  "file": "/root/eclipse-workspace/face_recong/face_recong.cpp"
+}
+]
