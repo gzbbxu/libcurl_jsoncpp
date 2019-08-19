@@ -10,6 +10,8 @@
 #include <string>
 #include <list>
 #include <jsoncpp/json/json.h>
+#include <iostream>
+
 using namespace std;
 
 class StrangerBean {
@@ -37,38 +39,58 @@ public:
 };
 class RecordsBean {
 public:
-	string &uuid;
-	vector<string*> mils;
-	RecordsBean(string &uid) :
+	string uuid;
+	vector<string> mils;
+	RecordsBean(string uid) :
 			uuid(uid) {
 
 	}
-	string serializer() {
+	RecordsBean() {
+		uuid = "";
+	}
+	Json::Value serializer() {
 		Json::Value JSroot;
 		Json::Value JSuuid;
 		Json::Value JSmils;
 		JSroot["uuid"] = uuid;
 		for (int i = 0; i < mils.size(); i++) {
 
-			JSmils[i] = *mils[i];
+			JSmils[i] = mils[i];
 		}
 		JSroot["mils"] = JSmils;
-		string out = JSroot.toStyledString();
-		return out;
+//		string out = JSroot.toStyledString();
+		return JSroot;
+	}
+	void deserialize(const Json::Value &value) {
+		this->uuid = value["uuid"].asString();
+		Json::Value milsValue = value["mils"];
+		if (!milsValue.isNull() && milsValue.size() > 0) {
+			int i;
+			for (i = 0; i < milsValue.size(); i++) {
+				string s = milsValue[i].asString();
+				this->mils.push_back(s);
+			}
+		}
 	}
 };
 
 class DeviceInfoBean {
 public:
-	string &uuid;
-	string &name;
-	string &ip;
-	string &device_type;
-	DeviceInfoBean(string &uid, string &name, string &ip, string &device_type) :
+	string uuid;
+	string name;
+	string ip;
+	string device_type;
+	DeviceInfoBean(string uid, string name, string ip, string device_type) :
 			uuid(uid), name(name), ip(ip), device_type(device_type) {
 
 	}
-	string serializer() {
+	DeviceInfoBean() {
+		uuid = "";
+		name = "";
+		ip = "";
+		device_type = "";
+	}
+	Json::Value serializer() {
 		Json::Value JSroot;
 		if (!uuid.empty()) {
 			JSroot["uuid"] = uuid;
@@ -86,7 +108,14 @@ public:
 			JSroot["device_type"] = device_type;
 		}
 		string out = JSroot.toStyledString();
-		return out;
+		return JSroot;
+	}
+	void deserialize(const Json::Value &value) {
+
+		this->ip = value["ip"].asString();
+		this->name = value["name"].asString();
+		this->device_type = value["device_type"].asString();
+		this->uuid = value["uuid"].asString();
 	}
 
 };
@@ -118,33 +147,64 @@ public:
 		device_info = new DeviceInfoBean(uid, name, ip, device_type);
 	}
 
+	CardRecordData() {
+		device_info = new DeviceInfoBean;
+	}
+
+	void deserialize(const string &json) {
+		Json::Reader reader;
+		Json::Value value;
+		if (reader.parse(json, value)) {
+			Json::Value deviceInfoValue = value["device_info"];
+			Json::Value recordsValue = value["records"];
+			if (!deviceInfoValue.isNull()) {
+				device_info->deserialize(deviceInfoValue);
+			}
+			if (!recordsValue.isNull() && recordsValue.size() > 0) {
+				/*cout << "recordsValue " << recordsValue[0] << "size = "
+						<< recordsValue.size() << endl;*/
+				int i;
+				for (i = 0; i < recordsValue.size(); i++) {
+					/*
+					 string uuidValueStr = recordsValue[i]["uuid"].asString();
+					 RecordsBean * recordBean = new RecordsBean(uuidValueStr);
+					 recordBean->uuid = uuidValueStr;*/
+					RecordsBean *recordBean = new RecordsBean;
+					recordBean->deserialize(recordsValue[i]);
+
+					records.push_back(recordBean);
+				}
+			}
+
+		} else {
+			cout << "parse error " << endl;
+		}
+	}
 	string serializer() {
 		Json::Value JSroot;
 		Json::Value JSrecords;
 		Json::Value JSdevice_info;
 		JSroot["device_info"] = device_info->serializer();
-		cout << "=================" << endl;
 		int i = 0;
 		for (list<RecordsBean*>::iterator it = records.begin();
 				it != records.end();) {
 			RecordsBean *r = *it;
-			string s = r->serializer();
-			JSrecords[i] = s;
+//			string s = "test";
+			JSrecords[i] = r->serializer();
+			;
 			it++;
 			i++;
 		}
 		JSroot["records"] = JSrecords;
 		string out = JSroot.toStyledString();
-//		cout << out << endl;
 		return out;
 
 	}
 	~CardRecordData() {
 		for (list<RecordsBean*>::iterator it = records.begin();
-				it != records.end();) {
+				it != records.end(); it++) {
 			RecordsBean *r = *it;
 			delete r;
-			it++;
 		}
 		delete device_info;
 	}

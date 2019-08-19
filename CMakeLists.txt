@@ -1,8 +1,15 @@
 cmake_minimum_required (VERSION 2.6)
 add_definitions(-std=c++11)
+message("=======================")
 project (face_recong)
-
+#link_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+message(${CMAKE_CURRENT_LIST_DIR}/include)
 LINK_LIBRARIES(curl)
 LINK_LIBRARIES(jsoncpp)
+LINK_LIBRARIES(pthread)
 
-add_executable(face_recong face_recong.cpp)
+file(GLOB srcs "src/*.cpp")
+message("8888888888888")
+message(src)
+add_executable(face_recong 
+ 			  ${srcs})
