@@ -12,9 +12,16 @@
 #include <jsoncpp/json/json.h>
 #include <iostream>
 
-using namespace std;
+#include "../include/HttpUtils.h"
 
-class StrangerBean {
+using namespace std;
+ class BaseBean{
+public:
+	virtual string serializer()=0;
+	void deserialize(const Json::Value &value);
+	virtual ~BaseBean();
+};
+  class StrangerBean:public BaseBean {
 public:
 	string &image;
 	vector<string*> mils;
@@ -22,7 +29,10 @@ public:
 			image(image) {
 
 	}
-	string serializer() {
+	void deserialize(const Json::Value &value){
+
+	}
+	virtual string serializer() {
 		Json::Value JSroot;
 		Json::Value JSmils;
 		if (!image.empty()) {
@@ -90,7 +100,7 @@ public:
 		ip = "";
 		device_type = "";
 	}
-	Json::Value serializer() {
+	Json::Value  serializer() {
 		Json::Value JSroot;
 		if (!uuid.empty()) {
 			JSroot["uuid"] = uuid;
@@ -108,8 +118,10 @@ public:
 			JSroot["device_type"] = device_type;
 		}
 		string out = JSroot.toStyledString();
+//		cout<< "out >> device " << out << endl;
 		return JSroot;
 	}
+
 	void deserialize(const Json::Value &value) {
 
 		this->ip = value["ip"].asString();
@@ -183,7 +195,11 @@ public:
 	string serializer() {
 		Json::Value JSroot;
 		Json::Value JSrecords;
-		Json::Value JSdevice_info;
+
+//		cout << "jsdeviceinfo "  << JSdevice_info.asString() << endl;
+		cout << "device_info obj \n" <<  device_info->serializer();
+
+
 		JSroot["device_info"] = device_info->serializer();
 		int i = 0;
 		for (list<RecordsBean*>::iterator it = records.begin();
@@ -191,11 +207,11 @@ public:
 			RecordsBean *r = *it;
 //			string s = "test";
 			JSrecords[i] = r->serializer();
-			;
 			it++;
 			i++;
 		}
 		JSroot["records"] = JSrecords;
+
 		string out = JSroot.toStyledString();
 		return out;
 
@@ -211,6 +227,8 @@ public:
 };
 
 class FaceService {
+private:
+	HttpUtils * httpUtils;
 public:
 	FaceService();
 

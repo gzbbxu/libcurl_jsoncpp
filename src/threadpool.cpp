@@ -108,7 +108,7 @@ threadpool_t *threadpool_create(int min_thr_num, int max_thr_num, int queue_max_
         for (i = 0; i < min_thr_num; i++)
         {
             pthread_create(&(pool->threads[i]), NULL, threadpool_thread, (void *)pool);
-            printf("start thread 0x%x...\n", (unsigned int)pool->threads[i]);
+//            printf("start thread 0x%x...\n", (unsigned int)pool->threads[i]);
         }
         pthread_create(&(pool->adjust_tid), NULL, adjust_thread, (void *)pool);
         return pool;
@@ -171,7 +171,7 @@ void *threadpool_thread(void *threadpool)
                 /*如果线程池里线程个数大于最小值时可以结束当前线程*/
                 if (pool->live_thr_num > pool->min_thr_num)
                 {
-                    printf("thread 0x%x is exiting\n", (unsigned int)pthread_self());
+//                    printf("thread 0x%x is exiting\n", (unsigned int)pthread_self());
                     pool->live_thr_num--;
                     pthread_mutex_unlock(&(pool->lock));
                     pthread_exit(NULL);
@@ -198,7 +198,7 @@ void *threadpool_thread(void *threadpool)
         pthread_mutex_unlock(&(pool->lock));
 
         /*执行任务*/
-        printf("thread 0x%x start working\n", (unsigned int)pthread_self());
+//        printf("thread 0x%x start working\n", (unsigned int)pthread_self());
         pthread_mutex_lock(&(pool->thread_counter));
         pool->busy_thr_num++;                                       /*忙状态线程数加1*/
         pthread_mutex_unlock(&(pool->thread_counter));
@@ -206,7 +206,7 @@ void *threadpool_thread(void *threadpool)
         //task.function(task.arg);                               /*执行回调函数任务*/
 
         /*任务结束处理*/
-        printf("thread 0x%x end working\n", (unsigned int)pthread_self());
+//        printf("thread 0x%x end working\n", (unsigned int)pthread_self());
         pthread_mutex_lock(&(pool->thread_counter));
         pool->busy_thr_num--;                                       /*忙状态数减1*/
         pthread_mutex_unlock(&(pool->thread_counter));

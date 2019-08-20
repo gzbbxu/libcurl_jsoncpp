@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <sstream>
 #include <sys/time.h>
-#include "../include/HttpUtils.hpp"
+#include <map>
+#include "../include/HttpUtils.h"
 using namespace std;
 
 size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
@@ -87,7 +88,7 @@ int mainnet(int argc, char **argv) {
 	cout << "Hello world";
 	return 0;
 }
-size_t write_data_call(void *ptr, size_t size, size_t nmemb, void *stream) {
+size_t write_data_call222(void *ptr, size_t size, size_t nmemb, void *stream) {
 	cout << "write_data_call" << endl;
 	string data((const char*) ptr, (size_t) size * nmemb);
 	cout << "write_data_call" << data << endl;
@@ -130,7 +131,7 @@ int testPost() {
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, jsonStr.size());
 
 	//set call balc
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_call);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_call222);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 
 	//execute
@@ -161,27 +162,33 @@ int main11(int argc, char **argv) {
 	cout << "main end " << endl;
 	return 0;
 }
-int main(){
-	HttpUtils * httpUtil = HttpUtils::getInstance();
+void t(map<string, string> &map2) {
 
-	cout << httpUtil<<endl;
+}
+int main000() {
+	/*HttpUtils *httpUtil = HttpUtils::getInstance();
+	string jsonStr = testserializer();
+	cout << "jsonStr " << jsonStr << endl;
+//	httpUtil->post("http://192.168.1.105/face6/TestServlet/syncFace",jsonStr);
+	map<string, string> map;
 
-	httpUtil->release(&httpUtil);
-	cout << httpUtil <<endl;
-
-	int i;
-	int j;
-	string a ="abc";
-	char * b = new char[10];
-	HttpUtils * httpUtil2 = HttpUtils::getInstance();
-	cout << httpUtil2 <<endl;
-	cout << "main end " << endl;
-
-
-	HttpUtils * httpUtil3 = HttpUtils::getInstance();
-	char * c = new char[10];
-	cout << httpUtil3 <<endl;
+	map["current_version"] = "0";
+	httpUtil->get("http://192.168.1.105/face6/TestServlet/syncFace", map);
+	fgetc(stdin);
+	cout << "==== fgetc ===" << endl;*/
 	return 0;
 
+}
+class A{
+
+};
+int main() {
+	/*FaceService faceService;
+	fgetc(stdin);
+	cout << "==== fgetc ===" << endl;*/
+	string out = testserializer();
+	cout << out << endl;
+	cout << "main end " <<endl;
+	return 0;
 }
 

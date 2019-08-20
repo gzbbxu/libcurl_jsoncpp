@@ -8,11 +8,13 @@
 #include "../include/FaceService.h"
 
 FaceService::FaceService() {
-
+	httpUtils= HttpUtils::getInstance();
 }
 
 void FaceService::synFace(int current_verion) {
-
+	map<string,string> keys ;
+	keys["current_verion"] = current_verion;
+	httpUtils->get("sync",keys);
 }
 
 void FaceService::syncRecord(string &jsonRequest) {
@@ -45,6 +47,6 @@ void FaceService::syncRecordStranger(string &jsonRequest) {
 }
 
 FaceService::~FaceService() {
-
+//	httpUtl->release();
 }
 
