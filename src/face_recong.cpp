@@ -8,7 +8,9 @@
 #include <sys/time.h>
 #include <map>
 #include "../include/HttpUtils.h"
+#include "../include/modules.h"
 using namespace std;
+using namespace modules;
 
 size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
 	int len = size * nmemb; // real length
@@ -17,7 +19,7 @@ size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
 
 }
 //test json CardRecordData
-string testserializer() {
+string CardRecordDataserializer() {
 
 	string str = "222";
 	string &s = str;
@@ -55,9 +57,8 @@ string testserializer() {
 	cardRecordData.records.push_back(r2);
 
 	cout << r1->uuid << "  " << r2->uuid << endl;
-	std::string sb = cardRecordData.serializer();
-//	cout << sb <<endl;
-
+	string sb  = cardRecordData.serializer();
+	cout << sb << endl;
 	return sb;
 
 //	cardRecordData.records;
@@ -96,19 +97,19 @@ size_t write_data_call222(void *ptr, size_t size, size_t nmemb, void *stream) {
 	return size * nmemb;
 }
 void testDeserializer(string &jsonstr) {
+	 cout << "sb  Deserializer  = Deserializer Deserializer"  << endl;
 	CardRecordData cardRecordData;
 	cardRecordData.deserialize(jsonstr);
-
 	std::string sb = cardRecordData.serializer();
 
-	cout << "sb  testDeserializer = " << sb << endl;
+	 cout << "sb  testDeserializer = " << sb << endl;
 }
 int testPost() {
 
 	CURL *curl;
 	CURLcode res;
 	char tmp_str[256] = { 0 };
-	string jsonStr = testserializer();
+	string jsonStr = CardRecordDataserializer();
 	cout << "json = " << jsonStr << endl;
 	struct curl_slist *headers = NULL;
 	stringstream out;
@@ -166,29 +167,45 @@ void t(map<string, string> &map2) {
 
 }
 int main000() {
-	/*HttpUtils *httpUtil = HttpUtils::getInstance();
-	string jsonStr = testserializer();
-	cout << "jsonStr " << jsonStr << endl;
-//	httpUtil->post("http://192.168.1.105/face6/TestServlet/syncFace",jsonStr);
-	map<string, string> map;
+	HttpUtils *httpUtil = HttpUtils::getInstance();
+	 string jsonStr = CardRecordDataserializer();
+	 cout << "jsonStr " << jsonStr << endl;
+	 //	httpUtil->post("http://192.168.1.105/face6/TestServlet/syncFace",jsonStr);
+	 map<string, string> map;
 
-	map["current_version"] = "0";
-	httpUtil->get("http://192.168.1.105/face6/TestServlet/syncFace", map);
-	fgetc(stdin);
-	cout << "==== fgetc ===" << endl;*/
+	 map["current_version"] = "0";
+//	 httpUtil->get("http://192.168.1.105/face6/TestServlet/syncFace", map);
+	 fgetc(stdin);
+	 cout << "==== fgetc ===" << endl;
 	return 0;
 
 }
-class A{
+class A {
 
 };
 int main() {
-	/*FaceService faceService;
+	/*string s = testserializer();
+	cout << "-------------" << endl;
+	cout << s << endl;*/
+
+//	testDeserializer(s);
+
+	FaceService * f =  FaceService::getInstance();
+
+	/*gouzao zhixing faceservice
+	http utils gou zao ok 0x2211bc0*/
+
+
+//	f->syncFace("100");
+	string s = CardRecordDataserializer();
+//	f->syncRecord(s);
+	string iamge = "imagestr";
+	f->addPeople("lisi","leader",iamge);
+	cout << "==== pause ===" << endl;
 	fgetc(stdin);
-	cout << "==== fgetc ===" << endl;*/
-	string out = testserializer();
-	cout << out << endl;
-	cout << "main end " <<endl;
+	cout << "==== fgetc ===" << endl;
+
+	cout << "main end " << endl;
 	return 0;
 }
 

@@ -20,13 +20,16 @@
 #include <unistd.h>
 #include <stdarg.h>
 using namespace std;
-
+typedef void (*httpRespCallback)(string & jsonStr,int action);
 class HttpUtils;
 struct Request {
-	char *method;
+	bool postmethod;
 	char *url;
 	char *jsonstr;
+	int action;
+	bool isKeyValue;
 	HttpUtils *httpUtil;
+	httpRespCallback  funCallBack;
 };
 
 class HttpUtils {
@@ -40,11 +43,11 @@ public:
 	string getMethod;
 	static string baseUrl;
 	static HttpUtils *httpUtilsInstance;
-	void init();
 
-	void get(string  url,map<string,string>& keys) ;
-	void post(string url, string &jsonStr);
-	void release(HttpUtils **httpUtil);
+	void get(string  url,map<string,string>& keys,int action,httpRespCallback  fun) ;
+	void post(string url, string &jsonStr,int action,httpRespCallback fun);
+	void post(string  url,map<string,string>& keys,int action,httpRespCallback  fun) ;
+	void release();
 	static size_t  write_data_call(void *ptr, size_t size, size_t nmemb,void *stream);
 	static void* process(void *arg);
 	static HttpUtils* getInstance();

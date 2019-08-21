@@ -162,7 +162,7 @@ void *threadpool_thread(void *threadpool)
 
         while ((pool->queue_size == 0) && (!pool->shutdown))
         {
-            printf("thread 0x%x is waiting\n", (unsigned int)pthread_self());
+//            printf("thread 0x%x is waiting\n", (unsigned int)pthread_self());
             pthread_cond_wait(&(pool->queue_not_empty), &(pool->lock));
             /*清除指定数目的空闲线程，如果要结束的线程个数大于0，结束线程*/
             if (pool->wait_exit_thr_num > 0)
