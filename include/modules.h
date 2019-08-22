@@ -179,14 +179,30 @@ public:
 
 class StrangerBean: public BaseSerializerBean {
 public:
-	string &image;
-	vector<string*> mils;
-	StrangerBean(string &image) :
+	string image;
+	vector<string> mils;
+	StrangerBean(string image) :
 			image(image) {
 
 	}
-	virtual void deserialize(const string &json) {
+	StrangerBean() {
+		image = "";
+	}
 
+	virtual void deserialize(const string &json) {
+		Json::Reader reader;
+		Json::Value value;
+		if (reader.parse(json, value)) {
+			this->image = value["image"].asString();
+			Json::Value milsValue = value["mils"];
+			if (!milsValue.isNull() && milsValue.size() > 0) {
+				int i;
+				for (i = 0; i < milsValue.size(); i++) {
+					string s = milsValue[i].asString();
+					this->mils.push_back(s);
+				}
+			}
+		}
 	}
 	virtual string serializer() {
 		Json::Value JSroot;
@@ -196,14 +212,59 @@ public:
 		}
 		for (int i = 0; i < mils.size(); i++) {
 
-			JSmils[i] = *mils[i];
+			JSmils[i] = mils[i];
 		}
 		JSroot["mils"] = JSmils;
 		string out = JSroot.toStyledString();
 		return out;
 	}
 };
-class RecordsBean {
+class StrangerUploadBean: public BaseSerializerBean {
+public:
+	list<StrangerBean*> records;
+	list<StrangerBean*>& getStrangerList() {
+		return records;
+	}
+
+	virtual void deserialize(const string &json) {
+		Json::Reader reader;
+		Json::Value value;
+		if (reader.parse(json, value)) {
+			Json::Value recordsValue = value["records"];
+			if (!recordsValue.isNull() && recordsValue.size() > 0) {
+				int i;
+				for (i = 0; i < recordsValue.size(); i++) {
+					StrangerBean *recordBean = new StrangerBean;
+					recordBean->deserialize(recordsValue[i].toStyledString());
+
+					records.push_back(recordBean);
+				}
+			}
+		} else {
+			cout << "deserialize error" << endl;
+		}
+	}
+	virtual string serializer() {
+		Json::Value JSroot;
+		Json::Value JSrecords;
+		Json::Reader JSreade;
+		int i = 0;
+		for (list<StrangerBean*>::iterator it = records.begin();
+				it != records.end();) {
+			StrangerBean *r = *it;
+			Json::Value JSItem;
+			JSreade.parse(r->serializer(),JSItem);
+			JSrecords[i] = JSItem;
+			it++;
+			i++;
+		}
+		JSroot["records"] = JSrecords;
+
+		string out = JSroot.toStyledString();
+		return out;
+	}
+};
+class RecordsBean : public BaseSerializerBean{
 public:
 	string uuid;
 	vector<string> mils;
@@ -214,7 +275,7 @@ public:
 	RecordsBean() {
 		uuid = "";
 	}
-	Json::Value serializer() {
+	virtual string serializer() {
 		Json::Value JSroot;
 		Json::Value JSuuid;
 		Json::Value JSmils;
@@ -224,22 +285,27 @@ public:
 			JSmils[i] = mils[i];
 		}
 		JSroot["mils"] = JSmils;
-		return JSroot;
+		return JSroot.toStyledString();
 	}
-	void deserialize(const Json::Value &value) {
-		this->uuid = value["uuid"].asString();
-		Json::Value milsValue = value["mils"];
-		if (!milsValue.isNull() && milsValue.size() > 0) {
-			int i;
-			for (i = 0; i < milsValue.size(); i++) {
-				string s = milsValue[i].asString();
-				this->mils.push_back(s);
+	virtual void deserialize(const string &json) {
+		Json::Reader reader;
+		Json::Value value;
+		if (reader.parse(json, value)) {
+			this->uuid = value["uuid"].asString();
+			Json::Value milsValue = value["mils"];
+			if (!milsValue.isNull() && milsValue.size() > 0) {
+				int i;
+				for (i = 0; i < milsValue.size(); i++) {
+					string s = milsValue[i].asString();
+					this->mils.push_back(s);
+				}
 			}
 		}
+
 	}
 };
 
-class DeviceInfoBean {
+class DeviceInfoBean: public BaseSerializerBean {
 public:
 	string uuid;
 	string name;
@@ -255,7 +321,7 @@ public:
 		ip = "";
 		device_type = "";
 	}
-	string serializer() {
+	virtual string serializer() {
 		Json::Value JSroot;
 		if (!uuid.empty()) {
 			JSroot["uuid"] = uuid;
@@ -277,7 +343,7 @@ public:
 		return out;
 	}
 
-	void deserialize(const string &json) {
+	virtual void deserialize(const string &json) {
 		Json::Reader reader;
 		Json::Value value;
 		if (reader.parse(json, value)) {
@@ -292,18 +358,31 @@ public:
 	}
 
 };
-class DeviceData {
+class DeviceData: public BaseSerializerBean {
 public:
 	DeviceInfoBean *device_info;
 
 	DeviceData(string &uid, string &name, string &ip, string &device_type) {
 		device_info = new DeviceInfoBean(uid, name, ip, device_type);
 	}
-	string serializer() {
+	DeviceData() {
+		device_info = new DeviceInfoBean;
+	}
+	virtual string serializer() {
 		Json::Value JSroot;
-		JSroot["device_info"] = device_info->serializer();
+		Json::Reader reader;
+		Json::Value jsDeviceInfo;
+		reader.parse(device_info->serializer(), jsDeviceInfo);
+		JSroot["device_info"] = jsDeviceInfo;
 		string out = JSroot.toStyledString();
 		return out;
+	}
+
+	virtual void deserialize(const string &json) {
+
+	}
+	~DeviceData() {
+		delete device_info;
 	}
 
 };
@@ -337,7 +416,7 @@ public:
 				int i;
 				for (i = 0; i < recordsValue.size(); i++) {
 					RecordsBean *recordBean = new RecordsBean;
-					recordBean->deserialize(recordsValue[i]);
+					recordBean->deserialize(recordsValue[i].toStyledString());
 
 					records.push_back(recordBean);
 				}
@@ -352,13 +431,17 @@ public:
 		Json::Value JSrecords;
 		Json::Value JSdeviceInfo;
 		Json::Reader JSreade;
+//		Json::Reader JSItemReader;
 		JSreade.parse(device_info->serializer(), JSdeviceInfo);
 		JSroot["device_info"] = JSdeviceInfo;
 		int i = 0;
 		for (list<RecordsBean*>::iterator it = records.begin();
 				it != records.end();) {
 			RecordsBean *r = *it;
-			JSrecords[i] = r->serializer();
+			Json::Value item;
+
+			JSreade.parse( r->serializer(),item);
+			JSrecords[i] =item;
 			it++;
 			i++;
 		}

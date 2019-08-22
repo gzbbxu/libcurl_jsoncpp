@@ -19,15 +19,22 @@ using namespace std;
 using namespace modules;
 class FaceService {
 private:
-	const int syncFaceAction = 10;
+	const int syncFaceAction = 0;
 	const int syncRecordAction = syncFaceAction+1;
 	const int addPeopleAction = syncFaceAction+2;
+	const int syncHeartbeatActions = syncFaceAction+3;
+	const int getDeviceInfoActions = syncFaceAction+4;
+	const int syncDevicesCreateOrUpdateDeviceAction = syncFaceAction+5;
+	const int syncRecordStranagerAction = syncFaceAction+6;
+	static const string path[];
 	static FaceService* faceService;
 
 public:
 	FaceService();
 
 	static void respCallback(string & jsonStr,int action);
+
+	void postCommon(string & json,int action);
 
 	static FaceService* getInstance();
 
@@ -45,13 +52,21 @@ public:
 
 	void deletePeople(string &uuid);
 
-	void syncHeartbeats(string *jsonRequest);
+	void syncHeartbeats(string &jsonRequest);
+
+	void syncHeartbeatsResp(BaseResponse * baseResponse);
 
 	void getDeviceInfo(string uuid);
 
+	void getDeviceInfoResp(DeviceInfoBean * deviceInfo);
+
 	void syncDevicesCreateOrUpdateDevices(string &jsonRequest);
 
+	void syncDevicesCreateOrUpdateDevicesResp(BaseResponse * baseResponse);
+
 	void syncRecordStranger(string &jsonRequest);
+
+	void syncRecordStrangerResp(BaseResponse * baseResponse);
 
 	virtual ~FaceService();
 };

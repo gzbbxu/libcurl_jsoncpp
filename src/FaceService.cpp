@@ -7,9 +7,10 @@
 
 #include "../include/FaceService.h"
 FaceService *FaceService::faceService = new FaceService;
+const string FaceService::path[] = { "syncFace", "syncRecord", "addPeople",
+		"syncHeart", "getDeviceInfo", "createOrUpdate", "recordStranger" };
 FaceService::FaceService() {
 
-	cout << "gouzao zhixing faceservice" << endl;
 }
 FaceService* FaceService::getInstance() {
 	return faceService;
@@ -21,15 +22,6 @@ void FaceService::respCallback(string &jsonStr, int action) {
 		SyncFaceResponse syncFaceResp;
 		BaseSerializerBean *base = &syncFaceResp;
 		base->deserialize(jsonStr);
-		/*cout << "deserialize over" << endl;
-		 cout << syncFaceResp.current_version << endl;
-		 cout << syncFaceResp.created.size() << endl;
-		 list<UserBean *>::iterator it;
-		 for(it = syncFaceResp.created.begin();it !=syncFaceResp.created.end();it++){
-		 UserBean * userbean = *it;
-		 cout << "userbean" << userbean->name << endl;
-
-		 }*/
 		faceService->syncFaceResponse(&syncFaceResp);
 	} else if (action == faceService->syncRecordAction) {
 		BaseResponse baseResp;
@@ -41,29 +33,41 @@ void FaceService::respCallback(string &jsonStr, int action) {
 		BaseSerializerBean *base = &addPeopleResp;
 		base->deserialize(jsonStr);
 		faceService->addPeopleResponse(&addPeopleResp);
+	} else if (action == faceService->syncHeartbeatActions) {
+		BaseResponse baseResp;
+		BaseSerializerBean *base = &baseResp;
+		base->deserialize(jsonStr);
+		faceService->syncHeartbeatsResp(&baseResp);
+	} else if (action == faceService->getDeviceInfoActions) {
+		DeviceInfoBean device;
+		BaseSerializerBean *base = &device;
+		base->deserialize(jsonStr);
+		faceService->getDeviceInfoResp(&device);
+	} else if (action == faceService->syncDevicesCreateOrUpdateDeviceAction) {
+		BaseResponse baseResp;
+		baseResp.deserialize(jsonStr);
+		faceService->syncDevicesCreateOrUpdateDevicesResp(&baseResp);
+	} else if (action == faceService->syncRecordStranagerAction) {
+		BaseResponse baseResp;
+		baseResp.deserialize(jsonStr);
+		faceService->syncRecordStrangerResp(&baseResp);
 	}
 
 }
-/*write_data_call{"error":false,"detail":null,"is_latest":true,"current_version":0,"clear":true,"created":
- [{"uuid":"00158f931ba-18d9-4d2a-b27a-e16a88694988","name":"jack","position":"产品经理","image":"iv111VBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAACJmUlEQVR4nA","character":0},
- {"uuid":"44258f931ba-18d9-4d2a-b27a-e16a88694988","name":"tomcat44","position":"产品经理44","image":"iv44VBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAACJmUlEQVR4nA","character":0}],
- "updated":[{"uuid":"333158f931ba-18d9-4d2a-b27a-e16a88694988","name":"jack","position":"产品经理33","image":"iv333VBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAACJmUlEQVR4nA","character":0},
- {"uuid":null,"name":null,"position":null,"image":null,"character":0}],"deleted":null}*/
 
 void FaceService::syncFace(string current_verion) {
 	map<string, string> keys;
 	keys["current_version"] = current_verion;
 	httpRespCallback fun = (httpRespCallback) respCallback;
-	HttpUtils::getInstance()->get("syncFace", keys, syncFaceAction, fun);
+	HttpUtils::getInstance()->get(path[syncFaceAction], keys, syncFaceAction,
+			fun);
 }
 void FaceService::syncFaceResponse(SyncFaceResponse *syncFaceResp) {
 	cout << syncFaceResp->detail << syncFaceResp->error << endl;
 }
 
 void FaceService::syncRecord(string &jsonRequest) {
-	httpRespCallback fun = (httpRespCallback) respCallback;
-	HttpUtils::getInstance()->post("syncRecord", jsonRequest, syncRecordAction,
-			fun);
+	postCommon(jsonRequest, syncRecordAction);
 }
 
 void FaceService::syncRecordResponse(BaseResponse *baseResponse) {
@@ -71,38 +75,66 @@ void FaceService::syncRecordResponse(BaseResponse *baseResponse) {
 			<< baseResponse->error << endl;
 }
 
-void FaceService::addPeople(string name, string position,
-		string &imagebase64) {
+void FaceService::addPeople(string name, string position, string &imagebase64) {
 	map<string, string> keys;
 	keys["name"] = name;
 	keys["position"] = position;
 	keys["image"] = imagebase64;
 	httpRespCallback fun = (httpRespCallback) respCallback;
-	HttpUtils::getInstance()->post("addPeople", keys, addPeopleAction, fun);
+	HttpUtils::getInstance()->post(path[addPeopleAction], keys, addPeopleAction,
+			fun);
 
 }
-void FaceService::addPeopleResponse(AddPeopleResponce * addPeopleResp){
-
+void FaceService::addPeopleResponse(AddPeopleResponce *addPeopleResp) {
+	cout << "addPeopleResponse" << addPeopleResp->detail << " "
+			<< addPeopleResp->error << endl;
 }
 
 void FaceService::deletePeople(string &uuid) {
 
 }
 
-void FaceService::syncHeartbeats(string *jsonRequest) {
+void FaceService::syncHeartbeats(string &jsonRequest) {
 
+	/*	httpRespCallback fun = (httpRespCallback) respCallback;
+	 HttpUtils::getInstance()->post(path[syncHeartbeatActions], jsonRequest,
+	 syncHeartbeatActions, fun);*/
+	postCommon(jsonRequest, syncHeartbeatActions);
+}
+void FaceService::syncHeartbeatsResp(BaseResponse *baseResponse) {
+	cout << "syncResp " << baseResponse->detail << "" << endl;
 }
 
 void FaceService::getDeviceInfo(string uuid) {
 
+	map<string, string> keys;
+	keys["uuid"] = uuid;
+	httpRespCallback fun = (httpRespCallback) respCallback;
+	HttpUtils::getInstance()->get(path[getDeviceInfoActions], keys,
+			getDeviceInfoActions, fun);
+}
+void FaceService::getDeviceInfoResp(DeviceInfoBean *deviceInfo) {
+	cout << "getDeviceInfoResp " << deviceInfo->uuid << endl;
 }
 
 void FaceService::syncDevicesCreateOrUpdateDevices(string &jsonRequest) {
-
+	postCommon(jsonRequest, syncDevicesCreateOrUpdateDeviceAction);
+}
+void FaceService::syncDevicesCreateOrUpdateDevicesResp(
+		BaseResponse *baseResponse) {
+	cout << "syncDevicesCreateOrUpdateDevicesResp " << baseResponse->detail
+			<< endl;
+}
+void FaceService::syncRecordStranger(string &jsonRequest) {
+	postCommon(jsonRequest, syncRecordStranagerAction);
 }
 
-void FaceService::syncRecordStranger(string &jsonRequest) {
-
+void FaceService::syncRecordStrangerResp(BaseResponse *baseResponse) {
+	cout << "syncRecordStrangerResp" << " " << baseResponse->detail << endl;
+}
+void FaceService::postCommon(string &jsonRequest, int action) {
+	httpRespCallback fun = (httpRespCallback) respCallback;
+	HttpUtils::getInstance()->post(path[action], jsonRequest, action, fun);
 }
 
 FaceService::~FaceService() {

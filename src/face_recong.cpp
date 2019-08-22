@@ -18,6 +18,22 @@ size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
 	return 0;
 
 }
+string deviceDataSer() {
+	DeviceData deviceData;
+	deviceData.device_info->device_type = "in";
+	deviceData.device_info->uuid = "001";
+	deviceData.device_info->ip = "192.168";
+	deviceData.device_info->name = "zhagn3";
+	return deviceData.serializer();
+}
+string deviceInfoStr() {
+	DeviceInfoBean deviceData;
+	deviceData.device_type = "in";
+	deviceData.uuid = "001";
+	deviceData.ip = "192.168";
+	deviceData.name = "zhagn3";
+	return deviceData.serializer();
+}
 //test json CardRecordData
 string CardRecordDataserializer() {
 
@@ -57,7 +73,55 @@ string CardRecordDataserializer() {
 	cardRecordData.records.push_back(r2);
 
 	cout << r1->uuid << "  " << r2->uuid << endl;
-	string sb  = cardRecordData.serializer();
+	string sb = cardRecordData.serializer();
+	cout << sb << endl;
+	return sb;
+
+//	cardRecordData.records;
+
+}
+
+//test json CardRecordData
+string strangerDataserializer() {
+	cout << "serializer111 serializer" <<endl;
+	string str = "222";
+	string &s = str;
+
+	string mi1 = "mi1";
+	string &refmi1 = mi1;
+
+	string mi2 = "mi2";
+	string &refmi2 = mi2;
+
+	string uid1 = "uid1";
+	string &refuid1 = uid1;
+
+	string uid2 = "uid2";
+	string &refuid2 = uid2;
+
+	string ip = "192.168.1.1";
+	string &refip = ip;
+
+	string name = "zhangsan";
+	string &refname = name;
+
+	string devicettype = "in";
+	string &refDeviceTYpe = devicettype;
+
+
+
+	StrangerUploadBean cardRecordData;
+	StrangerBean *r1 = new StrangerBean("im1");
+	StrangerBean *r2 = new StrangerBean("im2");
+
+	r1->mils.push_back(mi1);
+
+	r2->mils.push_back(mi2);
+
+	cardRecordData.records.push_back(r1);
+	cardRecordData.records.push_back(r2);
+	cout << "serializer serializer" <<endl;
+	string sb = cardRecordData.serializer();
 	cout << sb << endl;
 	return sb;
 
@@ -97,12 +161,12 @@ size_t write_data_call222(void *ptr, size_t size, size_t nmemb, void *stream) {
 	return size * nmemb;
 }
 void testDeserializer(string &jsonstr) {
-	 cout << "sb  Deserializer  = Deserializer Deserializer"  << endl;
+	cout << "sb  Deserializer  = Deserializer Deserializer" << endl;
 	CardRecordData cardRecordData;
 	cardRecordData.deserialize(jsonstr);
 	std::string sb = cardRecordData.serializer();
 
-	 cout << "sb  testDeserializer = " << sb << endl;
+	cout << "sb  testDeserializer = " << sb << endl;
 }
 int testPost() {
 
@@ -168,40 +232,97 @@ void t(map<string, string> &map2) {
 }
 int main000() {
 	HttpUtils *httpUtil = HttpUtils::getInstance();
-	 string jsonStr = CardRecordDataserializer();
-	 cout << "jsonStr " << jsonStr << endl;
-	 //	httpUtil->post("http://192.168.1.105/face6/TestServlet/syncFace",jsonStr);
-	 map<string, string> map;
+	string jsonStr = CardRecordDataserializer();
+	cout << "jsonStr " << jsonStr << endl;
+	//	httpUtil->post("http://192.168.1.105/face6/TestServlet/syncFace",jsonStr);
+	map<string, string> map;
 
-	 map["current_version"] = "0";
+	map["current_version"] = "0";
 //	 httpUtil->get("http://192.168.1.105/face6/TestServlet/syncFace", map);
-	 fgetc(stdin);
-	 cout << "==== fgetc ===" << endl;
+	fgetc(stdin);
+	cout << "==== fgetc ===" << endl;
 	return 0;
 
 }
 class A {
 
 };
+int testPostForm() {
+
+	CURL *curl;
+	CURLcode res;
+	char tmp_str[256] = { 0 };
+	string jsonStr;
+	jsonStr = "name=zhang3";
+	cout << "json = " << jsonStr << endl;
+	struct curl_slist *headers = NULL;
+	stringstream out;
+
+	curl = curl_easy_init();
+
+	curl_easy_setopt(curl, CURLOPT_URL,
+			"http://192.168.1.105/face6/TestServlet/addPeople");
+//	cout << "===========" << endl;
+//	sprintf(tmp_str,"Content-Length: %s",jsonStr.c_str());
+
+	headers = curl_slist_append(headers,
+			"Content-TYpe:application/x-www-form-urlencoded;charset=UTF-8");
+
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+	curl_easy_setopt(curl, CURLOPT_POST, 1); //post
+
+	//post json
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonStr.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, jsonStr.size());
+
+	//set call balc
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_call222);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
+
+	//execute
+	res = curl_easy_perform(curl);
+	//free the list
+	curl_slist_free_all(headers);
+
+	//return
+	string result_json = out.str();
+
+//	cout << "result json: " << result_json <<endl;
+
+	testDeserializer(result_json);
+	curl_easy_cleanup(curl);
+
+}
 int main() {
 	/*string s = testserializer();
-	cout << "-------------" << endl;
-	cout << s << endl;*/
+	 cout << "-------------" << endl;
+	 cout << s << endl;*/
 
 //	testDeserializer(s);
-
-	FaceService * f =  FaceService::getInstance();
+	FaceService *f = FaceService::getInstance();
 
 	/*gouzao zhixing faceservice
-	http utils gou zao ok 0x2211bc0*/
-
+	 http utils gou zao ok 0x2211bc0*/
 
 //	f->syncFace("100");
-	string s = CardRecordDataserializer();
+//	string s = CardRecordDataserializer();
+//	cout << "s " << s <<endl;
 //	f->syncRecord(s);
-	string iamge = "imagestr";
-	f->addPeople("lisi","leader",iamge);
-	cout << "==== pause ===" << endl;
+	string iamge = "imagest";
+//	f->addPeople("lisi","leader",iamge);
+//	testPostForm();
+	string s2 = deviceDataSer();
+//	cout  << "s2 == " << s2 <<endl;
+//	f->syncHeartbeats(s2);
+//	f->getDeviceInfo("001");
+	string s3 = deviceInfoStr();
+//	f->syncDevicesCreateOrUpdateDevices(s3);
+	string s4 = strangerDataserializer();
+	cout << "s4" << s4 << endl;
+	f->syncRecordStranger(s4);
+	cout << "==== pause === " << endl;
+//	cout << sizeof(EntryKey) << endl;
 	fgetc(stdin);
 	cout << "==== fgetc ===" << endl;
 
