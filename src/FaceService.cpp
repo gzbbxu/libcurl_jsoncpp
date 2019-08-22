@@ -2,11 +2,13 @@
  * FaceService.cpp
  *
  *  Created on: 2019年8月16日
+ *
  *      Author: root
  */
 
 #include "../include/FaceService.h"
 FaceService *FaceService::faceService = new FaceService;
+//服务接口请求路径
 const string FaceService::path[] = { "syncFace", "syncRecord", "addPeople",
 		"syncHeart", "getDeviceInfo", "createOrUpdate", "recordStranger" };
 FaceService::FaceService() {
@@ -15,7 +17,8 @@ FaceService::FaceService() {
 FaceService* FaceService::getInstance() {
 	return faceService;
 }
-void FaceService::respCallback(string &jsonStr, int action) {
+void FaceService::respCallback(string &jsonStr, int action,
+		int curlResultCode) {
 	cout << "faceService httpRespCallback action >> " << action << "respstr >> "
 			<< jsonStr << endl;
 	if (action == faceService->syncFaceAction) {
@@ -51,6 +54,25 @@ void FaceService::respCallback(string &jsonStr, int action) {
 		BaseResponse baseResp;
 		baseResp.deserialize(jsonStr);
 		faceService->syncRecordStrangerResp(&baseResp);
+	} else if (action == faceService->syncExceptionAction) {
+		//异常信息
+		switch (curlResultCode) {
+		case CURLE_COULDNT_RESOLVE_HOST:
+			cout << "无法解析主机!" << endl;
+			break;
+		case CURLE_COULDNT_CONNECT:
+			cout << "无法连接到主机" << endl;
+			break;
+		case CURLE_COULDNT_RESOLVE_PROXY:
+			cout << "无法解析代理" <<endl;
+			break;
+		case CURLE_FTP_WEIRD_SERVER_REPLY:
+			cout << "curl数据解析失败" <<endl;
+			break;
+		default:
+			cout << "其他错位" << curlResultCode << endl;
+			break;
+		}
 	}
 
 }

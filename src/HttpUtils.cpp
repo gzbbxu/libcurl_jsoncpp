@@ -10,9 +10,6 @@ HttpUtils *HttpUtils::httpUtilsInstance = new HttpUtils;
 string HttpUtils::baseUrl = "http://192.168.1.105/face6/TestServlet/";
 HttpUtils::HttpUtils() {
 
-	getMethod = "get";
-	postMethod = "post";
-
 	curl_global_init(CURL_GLOBAL_ALL);
 	thp = threadpool_create(3, 100, 100);
 	cout << "http utils gou zao ok " << thp << endl;
@@ -116,10 +113,16 @@ void* HttpUtils::process(void *arg) {
 	//execute
 
 	res = curl_easy_perform(curl);
-	string json = out.str();
-	cout << "execute end end " << endl;
+	cout << "execute end end res ==  " << res << endl;
+	if (res == CURLE_OK) {
+		string json = out.str();
+		(*fun)(json, action, res);
+	} else {
+		string json = "";
+		(*fun)(json, -1, res);
+	}
+
 	freeRequest(request);
-	(*fun)(json, action);
 
 	//free the list
 	curl_slist_free_all(headers);

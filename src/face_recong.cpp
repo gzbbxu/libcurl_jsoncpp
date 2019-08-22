@@ -7,6 +7,8 @@
 #include <sstream>
 #include <sys/time.h>
 #include <map>
+#include <sys/time.h>
+#include <signal.h>
 #include "../include/HttpUtils.h"
 #include "../include/modules.h"
 using namespace std;
@@ -83,7 +85,7 @@ string CardRecordDataserializer() {
 
 //test json CardRecordData
 string strangerDataserializer() {
-	cout << "serializer111 serializer" <<endl;
+	cout << "serializer111 serializer" << endl;
 	string str = "222";
 	string &s = str;
 
@@ -108,8 +110,6 @@ string strangerDataserializer() {
 	string devicettype = "in";
 	string &refDeviceTYpe = devicettype;
 
-
-
 	StrangerUploadBean cardRecordData;
 	StrangerBean *r1 = new StrangerBean("im1");
 	StrangerBean *r2 = new StrangerBean("im2");
@@ -120,7 +120,7 @@ string strangerDataserializer() {
 
 	cardRecordData.records.push_back(r1);
 	cardRecordData.records.push_back(r2);
-	cout << "serializer serializer" <<endl;
+	cout << "serializer serializer" << endl;
 	string sb = cardRecordData.serializer();
 	cout << sb << endl;
 	return sb;
@@ -329,4 +329,29 @@ int main() {
 	cout << "main end " << endl;
 	return 0;
 }
+void set_time() {
+	struct itimerval itv;
+	itv.it_interval.tv_sec = 1; //per / 10s
+	itv.it_interval.tv_usec= 0;
+	itv.it_value.tv_sec=5; // first time 5
+	itv.it_value.tv_usec = 0;
+	setitimer(ITIMER_REAL,&itv,NULL);
+	cout <<  "set time" <<endl;
+
+}
+int handle_count = 0;
+void alarm_handle(int sig){
+	handle_count++;
+	cout << handle_count<<endl;
+}
+/*int main() {
+	signal(SIGALRM,alarm_handle);
+	set_time();
+	int n = sleep(15);
+
+	cout << " destory " << n << endl;
+	alarm(0);
+
+	return 0;
+}*/
 
