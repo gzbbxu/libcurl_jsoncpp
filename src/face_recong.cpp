@@ -11,6 +11,13 @@
 #include <signal.h>
 #include "../include/HttpUtils.h"
 #include "../include/modules.h"
+#include "../include/DeviceUtil.h"
+#include "../include/FaceController.h"
+#include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
 using namespace std;
 using namespace modules;
 
@@ -294,6 +301,16 @@ int testPostForm() {
 	curl_easy_cleanup(curl);
 
 }
+int testFork(){
+	signal(SIGCHLD,SIG_IGN);
+	pid_t pid;
+	pid = fork(); //errno
+	if(pid > 0){
+		//parent process
+	}else if(pid ==0){
+		//child
+	}
+}
 int main() {
 	/*string s = testserializer();
 	 cout << "-------------" << endl;
@@ -318,17 +335,23 @@ int main() {
 //	f->getDeviceInfo("001");
 	string s3 = deviceInfoStr();
 //	f->syncDevicesCreateOrUpdateDevices(s3);
-	string s4 = strangerDataserializer();
-	cout << "s4" << s4 << endl;
-	f->syncRecordStranger(s4);
-	cout << "==== pause === " << endl;
+//	string s4 = strangerDataserializer();
+//	cout << "s4" << s4 << endl;
+	char ip[100] = {0};
+	int ips = DeviceUtil::get_local_ip("wlp3s0",ip);
+//	f->syncRecordStranger(s4);
+	cout << "==== pause === >>  " << ip << endl;
 //	cout << sizeof(EntryKey) << endl;
+//	basemodule::FaceController::start_timer();
+	testFork();
 	fgetc(stdin);
 	cout << "==== fgetc ===" << endl;
+
 
 	cout << "main end " << endl;
 	return 0;
 }
+
 void set_time() {
 	struct itimerval itv;
 	itv.it_interval.tv_sec = 1; //per / 10s

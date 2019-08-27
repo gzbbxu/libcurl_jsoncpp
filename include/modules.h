@@ -101,7 +101,7 @@ public:
 	bool clear;
 	list<UserBean*> created;
 	list<UserBean*> updated;
-	list<UserBean*> deleted;
+	list<string> deleted;
 	virtual void deserialize(const string &json) {
 
 		Json::Reader reader;
@@ -136,17 +136,12 @@ public:
 					updated.push_back(userBean);
 				}
 			}
-
 			if (!deletedValue.isNull() && deletedValue.size() > 0) {
 				int i;
 				for (i = 0; i < deletedValue.size(); i++) {
-					UserBean *userBean = new UserBean;
-					userBean->deserialize(deletedValue[i].toStyledString());
-
-					deleted.push_back(userBean);
+					deleted.push_back(deletedValue[i].asString());
 				}
 			}
-
 		} else {
 			cout << "SyncFaceResponce deserialize error" << endl;
 		}
@@ -169,11 +164,6 @@ public:
 			delete r;
 		}
 
-		for (list<UserBean*>::iterator it = deleted.begin();
-				it != deleted.end(); it++) {
-			UserBean *r = *it;
-			delete r;
-		}
 	}
 };
 
@@ -253,7 +243,7 @@ public:
 				it != records.end();) {
 			StrangerBean *r = *it;
 			Json::Value JSItem;
-			JSreade.parse(r->serializer(),JSItem);
+			JSreade.parse(r->serializer(), JSItem);
 			JSrecords[i] = JSItem;
 			it++;
 			i++;
@@ -264,7 +254,7 @@ public:
 		return out;
 	}
 };
-class RecordsBean : public BaseSerializerBean{
+class RecordsBean: public BaseSerializerBean {
 public:
 	string uuid;
 	vector<string> mils;
@@ -362,7 +352,7 @@ class DeviceData: public BaseSerializerBean {
 public:
 	DeviceInfoBean *device_info;
 
-	DeviceData(string &uid, string &name, string &ip, string &device_type) {
+	DeviceData(string uid, string name, string ip, string device_type) {
 		device_info = new DeviceInfoBean(uid, name, ip, device_type);
 	}
 	DeviceData() {
@@ -386,7 +376,7 @@ public:
 	}
 
 };
-class CardRecordData: virtual public BaseSerializerBean {
+class CardRecordData: public BaseSerializerBean {
 public:
 	DeviceInfoBean *device_info;
 	list<RecordsBean*> records;
@@ -395,12 +385,20 @@ public:
 		return records;
 	}
 
-	CardRecordData(string &uid, string &name, string &ip, string &device_type) {
+	CardRecordData(string uid, string name, string ip, string device_type) {
 		device_info = new DeviceInfoBean(uid, name, ip, device_type);
 	}
 
 	CardRecordData() {
 		device_info = new DeviceInfoBean;
+	}
+
+	void clear() {
+		for (list<RecordsBean*>::iterator it = records.begin();
+				it != records.end(); it++) {
+			RecordsBean *r = *it;
+			delete r;
+		}
 	}
 
 	virtual void deserialize(const string &json) {
@@ -440,8 +438,8 @@ public:
 			RecordsBean *r = *it;
 			Json::Value item;
 
-			JSreade.parse( r->serializer(),item);
-			JSrecords[i] =item;
+			JSreade.parse(r->serializer(), item);
+			JSrecords[i] = item;
 			it++;
 			i++;
 		}
@@ -452,11 +450,7 @@ public:
 
 	}
 	virtual ~CardRecordData() {
-		for (list<RecordsBean*>::iterator it = records.begin();
-				it != records.end(); it++) {
-			RecordsBean *r = *it;
-			delete r;
-		}
+		clear();
 		delete device_info;
 	}
 };

@@ -1,7 +1,49 @@
 [
 {
-  "directory": "/root/eclipse-workspace/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/face_recong.cpp.o -c /root/eclipse-workspace/face_recong/face_recong.cpp",
-  "file": "/root/eclipse-workspace/face_recong/face_recong.cpp"
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/CardRecordManager.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/CardRecordManager.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/CardRecordManager.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/DeviceUtil.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/DeviceUtil.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/DeviceUtil.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceService.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceService.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceService.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceDao.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceDao.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceDao.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/HttpUtils.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/HttpUtils.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/HttpUtils.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceController.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceController.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceController.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/face_recong.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/face_recong.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/face_recong.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/threadpool.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/threadpool.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/threadpool.cpp"
 }
 ]

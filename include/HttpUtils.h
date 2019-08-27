@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 using namespace std;
-typedef void (*httpRespCallback)(string &jsonStr, int action);
+typedef void (*httpRespCallback)(string &jsonStr, int action,int curlResultCode);
 class HttpUtils;
 
 struct Entry{

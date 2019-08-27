@@ -73,6 +73,8 @@ void* HttpUtils::process(void *arg) {
 	curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 50);
 	curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 5);
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5);
+	headers = curl_slist_append(headers,
+			"Connection: keep-alive");
 	if (request->postmethod) {
 		curl_easy_setopt(curl, CURLOPT_URL, request->url);
 		//post

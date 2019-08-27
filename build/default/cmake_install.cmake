@@ -1,4 +1,4 @@
-# Install script for directory: /root/eclipse-workspace/face_recong
+# Install script for directory: /home/zhouke/work/eclipse_cpp_work/face_recong
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/root/eclipse-workspace/face_recong/build/default/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
