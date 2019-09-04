@@ -61,6 +61,11 @@ private:
 	static void cardRecordSignal();
 
 	/**
+	 * 更改或者添加设备
+	 */
+	static void createOrUpdateDevice();
+
+	/**
 	 * 需要清除数据库
 	 */
 	static bool needClearDb;
@@ -115,6 +120,8 @@ private:
 	 * 陌生人同步回调
 	 */
 	static void syncRecordStrangerResp(BaseResponse *baseResponse);
+
+
 };
 
 } /* namespace basemodule */

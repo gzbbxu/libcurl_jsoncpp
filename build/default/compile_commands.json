@@ -1,49 +1,67 @@
 [
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/CardRecordManager.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/CardRecordManager.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/CardRecordManager.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/CardRecordManager.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/CardRecordManager.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/DeviceUtil.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/DeviceUtil.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/DeviceUtil.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/DeviceUtil.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/DeviceUtil.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceService.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceService.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/FaceService.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceService.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceService.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceDao.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceDao.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/FaceDao.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceDao.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceDao.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/HttpUtils.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/HttpUtils.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/HttpUtils.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/HttpUtils.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/HttpUtils.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/FaceController.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceController.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/json/json_value.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_value.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_value.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/json/json_reader.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_reader.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_reader.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/json/json_writer.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_writer.cpp",
+  "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/json/json_writer.cpp"
+},
+
+{
+  "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/FaceController.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceController.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/FaceController.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/face_recong.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/face_recong.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/face_recong.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/face_recong.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/face_recong.cpp"
 },
 
 {
   "directory": "/home/zhouke/work/eclipse_cpp_work/face_recong/build/default",
-  "command": "/usr/bin/c++     -O3 -DNDEBUG   -std=c++11 -o CMakeFiles/face_recong.dir/src/threadpool.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/threadpool.cpp",
+  "command": "/opt/hisi-linux/x86-arm/arm-himix200-linux/bin/arm-himix200-linux-g++      -fpermissive -Wwrite-strings -O3 -DNDEBUG   -std=c++11 -std=gnu++11 -o CMakeFiles/face_recong.dir/src/threadpool.cpp.o -c /home/zhouke/work/eclipse_cpp_work/face_recong/src/threadpool.cpp",
   "file": "/home/zhouke/work/eclipse_cpp_work/face_recong/src/threadpool.cpp"
 }
 ]

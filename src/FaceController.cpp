@@ -15,12 +15,15 @@ const int FaceController::syncFaceTime = 60;
 void FaceController::alarm_handle(int sig) {
 
 	cout << "alarm_handle sig = " << sig << endl;
-//	asyncHearbetas();
-	asyncFace();
+	asyncHearbetas();
+//	asyncFace();
 }
 void FaceController::start_timer() {
 	signal(SIGALRM, alarm_handle);
 	set_time();
+
+	//添加设备
+	createOrUpdateDevice();
 }
 void FaceController::stop_timer() {
 	alarm(0);
@@ -94,9 +97,20 @@ void FaceController::respCallback(string &jsonStr, int action,
 	}
 
 }
+void FaceController::createOrUpdateDevice(){
+	char ip[64] = { 0 };
+	DeviceUtil::get_local_ip("eth0", ip);
+	string sip(ip);
+	DeviceData deviceData(DeviceUtil::getDeviceUUid(),
+			DeviceUtil::getDeviceName(), sip, DeviceUtil::getDeviceType());
+	string json = deviceData.serializer();
+	httpRespCallback fun = respCallback;
+	FaceService::getInstance()->syncDevicesCreateOrUpdateDevices(json,fun);
+}
+
 void FaceController::asyncHearbetas() {
 	char ip[64] = { 0 };
-	DeviceUtil::get_local_ip("wlp3s0", ip);
+	DeviceUtil::get_local_ip("eth0", ip);
 	string sip(ip);
 	DeviceData deviceData(DeviceUtil::getDeviceUUid(),
 			DeviceUtil::getDeviceName(), sip, DeviceUtil::getDeviceType());
@@ -113,6 +127,8 @@ void FaceController::syncRecord(){
 
 	}
 }
+
+
 
 void FaceController::cardRecordSignal(){
 

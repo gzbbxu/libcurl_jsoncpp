@@ -7,7 +7,7 @@
 
 #include "../include/HttpUtils.h"
 HttpUtils *HttpUtils::httpUtilsInstance = new HttpUtils;
-string HttpUtils::baseUrl = "http://192.168.1.105/face6/TestServlet/";
+string HttpUtils::baseUrl = "http://192.168.1.132/face6/TestServlet/";
 HttpUtils::HttpUtils() {
 
 	curl_global_init(CURL_GLOBAL_ALL);

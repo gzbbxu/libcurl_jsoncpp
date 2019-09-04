@@ -1,6 +1,6 @@
 #include <iostream>
-#include <curl/curl.h>
-#include <jsoncpp/json/json.h>
+#include "../include/curl/curl.h"
+#include "../include/json/json.h"
 #include "../include/FaceService.h"
 #include <string.h>
 #include <stdio.h>
@@ -301,15 +301,46 @@ int testPostForm() {
 	curl_easy_cleanup(curl);
 
 }
-int testFork(){
-	signal(SIGCHLD,SIG_IGN);
+int testFork() {
+	signal(SIGCHLD, SIG_IGN);
 	pid_t pid;
 	pid = fork(); //errno
-	if(pid > 0){
+	if (pid > 0) {
 		//parent process
-	}else if(pid ==0){
+	} else if (pid == 0) {
 		//child
 	}
+}
+
+void getLocalMac() {
+	int sock_mac;
+
+	struct ifreq ifr_mac;
+	char mac_addr[30];
+
+	sock_mac = socket( AF_INET, SOCK_STREAM, 0);
+	if (sock_mac == -1) {
+		perror("create socket falise...mac/n");
+	}
+
+	memset(&ifr_mac, 0, sizeof(ifr_mac));
+	strncpy(ifr_mac.ifr_name, "eth0", sizeof(ifr_mac.ifr_name) - 1);
+
+	if ((ioctl(sock_mac, SIOCGIFHWADDR, &ifr_mac)) < 0) {
+		printf("mac ioctl error/n");
+	}
+
+	sprintf(mac_addr, "%02x%02x%02x%02x%02x%02x",
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[0],
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[1],
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[2],
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[3],
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[4],
+			(unsigned char) ifr_mac.ifr_hwaddr.sa_data[5]);
+
+	printf("local mac:%s /n", mac_addr);
+
+	close(sock_mac);
 }
 int main() {
 	/*string s = testserializer();
@@ -317,8 +348,7 @@ int main() {
 	 cout << s << endl;*/
 
 //	testDeserializer(s);
-	FaceService *f = FaceService::getInstance();
-
+	cout << "main" << endl;
 	/*gouzao zhixing faceservice
 	 http utils gou zao ok 0x2211bc0*/
 
@@ -337,16 +367,21 @@ int main() {
 //	f->syncDevicesCreateOrUpdateDevices(s3);
 //	string s4 = strangerDataserializer();
 //	cout << "s4" << s4 << endl;
-	char ip[100] = {0};
-	int ips = DeviceUtil::get_local_ip("wlp3s0",ip);
-//	f->syncRecordStranger(s4);
-	cout << "==== pause === >>  " << ip << endl;
-//	cout << sizeof(EntryKey) << endl;
+	cout << s2 << endl;
+	cout << s3 << endl;
+	char ip[100] = { 0 };
+	int ips = DeviceUtil::get_local_ip("eth0", ip);
 //	basemodule::FaceController::start_timer();
-	testFork();
+	DeviceUtil::getDeviceUUid();
+//	f->syncRecordStranger(s4);
+	cout << "==== pause === >>  " << ip<< endl;
+//	cout << sizeof(EntryKey) << endl;
+	basemodule::FaceController::start_timer();
+
+//	testFork();
+//	getLocalMac();
 	fgetc(stdin);
 	cout << "==== fgetc ===" << endl;
-
 
 	cout << "main end " << endl;
 	return 0;
@@ -355,26 +390,26 @@ int main() {
 void set_time() {
 	struct itimerval itv;
 	itv.it_interval.tv_sec = 1; //per / 10s
-	itv.it_interval.tv_usec= 0;
-	itv.it_value.tv_sec=5; // first time 5
+	itv.it_interval.tv_usec = 0;
+	itv.it_value.tv_sec = 5; // first time 5
 	itv.it_value.tv_usec = 0;
-	setitimer(ITIMER_REAL,&itv,NULL);
-	cout <<  "set time" <<endl;
+	setitimer(ITIMER_REAL, &itv, NULL);
+	cout << "set time" << endl;
 
 }
 int handle_count = 0;
-void alarm_handle(int sig){
+void alarm_handle(int sig) {
 	handle_count++;
-	cout << handle_count<<endl;
+	cout << handle_count << endl;
 }
 /*int main() {
-	signal(SIGALRM,alarm_handle);
-	set_time();
-	int n = sleep(15);
+ signal(SIGALRM,alarm_handle);
+ set_time();
+ int n = sleep(15);
 
-	cout << " destory " << n << endl;
-	alarm(0);
+ cout << " destory " << n << endl;
+ alarm(0);
 
-	return 0;
-}*/
+ return 0;
+ }*/
 

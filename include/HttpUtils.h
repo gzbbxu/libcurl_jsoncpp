@@ -10,8 +10,8 @@
 #define INCLUDE_HTTPUTILS_HPP_
 
 #include <string>
-#include <jsoncpp/json/json.h>
-#include <curl/curl.h>
+#include "json/json.h"
+#include "curl/curl.h"
 #include <sstream>
 #include <iostream>
 #include "threadpool.h"

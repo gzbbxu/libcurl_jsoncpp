@@ -9,7 +9,7 @@
 #define INCLUDE_MODULES_H_
 #include <string>
 #include <list>
-#include <jsoncpp/json/json.h>
+#include "json/json.h"
 #include <iostream>
 using namespace std;
 namespace modules {

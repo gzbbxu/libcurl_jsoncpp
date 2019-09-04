@@ -25,10 +25,23 @@ public:
 	static const string CONSNT_UUID;
 	static string deviceUUid ;
 	DeviceUtil();
+	/**
+	 * 获取设备唯一标志
+	 * 当前采用默认uuid 和 mac 地址组合生成
+	 */
 	static string  getDeviceUUid();
 	static string getDeviceName();
 	static string getDeviceType();
-	static  int get_local_ip(const char *eth_inf, char *ip);
+	/**
+	 * 获取指定网口的ip
+	 * @param eth_inf 指定网口名称
+	 * @ip 得到ip地址
+	 */
+	static  int get_local_ip(const char *eth_inf, /*out*/char *ip);
+	/**
+	 * 获取mac 地址
+	 */
+	static int get_local_mac(char * ma,const char *eth_inf);
 	virtual ~DeviceUtil();
 };
 
